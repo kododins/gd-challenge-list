@@ -72,21 +72,6 @@ header{
   border:1px solid var(--border);background:rgba(255,255,255,.025);
   border-radius:10px;padding:9px 12px;font-size:11px;font-weight:700;color:#d8c3c9
 }
-.langSwitch{
-  display:flex;align-items:center;gap:3px;
-  padding:3px;border:1px solid var(--border);border-radius:10px;
-  background:rgba(255,255,255,.025)
-}
-.langBtn{
-  border:0;background:transparent;color:var(--muted);
-  padding:7px 9px;border-radius:7px;cursor:pointer;
-  font:800 10px Inter;transition:.2s
-}
-.langBtn.active{
-  color:white;
-  background:linear-gradient(135deg,#741b3a,#b7355d);
-  box-shadow:0 3px 12px rgba(143,35,69,.25)
-}
 .status i{display:inline-block;width:7px;height:7px;background:#71d49a;border-radius:50%;margin-right:7px}
 
 .hero{max-width:1280px;margin:auto;padding:76px 26px 34px}
@@ -277,11 +262,7 @@ footer{
     GD <span>Challenge List</span>
   </div>
   <div class="navlinks">
-    <a class="active" href="#list" data-i18n="navChallenges">Challenges</a>
-  </div>
-  <div class="langSwitch" aria-label="Language selector">
-    <button class="langBtn active" data-lang="en">EN</button>
-    <button class="langBtn" data-lang="tr">TR</button>
+    <a class="active" href="#list">Challenges</a>
   </div>
   <div class="status"><i></i><span>LIST ONLINE</span></div>
 </nav>
@@ -294,14 +275,14 @@ footer{
       <h1>GD <em>Challenge List</em></h1>
     </div>
     <div class="heroStats">
-      <div class="heroStat"><b>1</b><span data-i18n="mainChallenges">Main Challenges</span></div>
+      <div class="heroStat"><b>1</b><span>Main Challenges</span></div>
     </div>
   </div>
 </section>
 
 <div class="toolbar">
   <div class="tabs">
-    <button class="tab active" data-tab="main" data-i18n="mainList">Main List</button>
+    <button class="tab active" data-tab="main">Main List</button>
   </div>
   <label class="search"><span>⌕</span><input id="search" placeholder="Search challenges..."></label>
   <select id="sort">
@@ -319,13 +300,13 @@ footer{
 </section>
 
 <aside class="side">
-  <div class="sideTitle"><h3 data-i18n="listEditors">List Editors</h3><span data-i18n="team">TEAM</span></div>
+  <div class="sideTitle"><h3>List Editors</h3><span>TEAM</span></div>
   <div class="people">
-    <div class="person"><div class="avatar">S</div><b>Salqih</b><span data-i18n="founder">Founder</span></div>
-    <div class="person"><div class="avatar">K</div><b>KodOdins</b><span data-i18n="admin">Admin</span></div>
+    <div class="person"><div class="avatar">S</div><b>Salqih</b><span>Founder</span></div>
+    <div class="person"><div class="avatar">K</div><b>KodOdins</b><span>Admin</span></div>
   </div>
   <div class="sideStats">
-    <div class="sideStat"><b>1</b><span data-i18n="main">Main</span></div>
+    <div class="sideStat"><b>1</b><span>Main</span></div>
   </div>
 </aside>
 </main>
@@ -340,11 +321,11 @@ footer{
     </div>
     <div class="modalGrid">
       <div class="modalBox">
-        <h4 data-i18n="levelDetails">Level Details</h4>
+        <h4>Level Details</h4>
         <div id="modalDetails" style="font-size:13px;line-height:1.6;"></div>
       </div>
       <div class="modalBox">
-        <h4 data-i18n="victors">Victors (Passed By)</h4>
+        <h4>Victors (Passed By)</h4>
         <ul class="victorsList" id="modalVictors"></ul>
       </div>
     </div>
@@ -405,7 +386,7 @@ function renderList() {
 
 function openModal(data) {
   document.getElementById("modalTitle").innerText = data.name;
-  document.getElementById("modalSub").innerHTML = `${translations[currentLang].createdBy} <b>${data.creator}</b> | ${translations[currentLang].verifiedBy} <b>${data.verifier || "N/A"}</b>`;
+  document.getElementById("modalSub").innerHTML = `Created by <b>${data.creator}</b> | Verified by <b>${data.verifier || "N/A"}</b>`;
   const iframe = document.getElementById("modalVideo");
   if(data.ytId) {
     iframe.src = `https://www.youtube.com/embed/${data.ytId}?autoplay=1`;
@@ -416,9 +397,9 @@ function openModal(data) {
   }
   document.getElementById("modalDetails").innerHTML = `
     <b>ID:</b> ${data.id || "N/A"}<br>
-    <b>${translations[currentLang].rating}:</b> ${data.points}<br>
-    <b>${translations[currentLang].difficulty}:</b> ${data.diff}<br>
-    <b>${translations[currentLang].type}:</b> ${data.type.toUpperCase()}
+    <b>Rating:</b> ${data.points}<br>
+    <b>Difficulty:</b> ${data.diff}<br>
+    <b>Type:</b> ${data.type.toUpperCase()}
   `;
   const victorsList = document.getElementById("modalVictors");
   victorsList.innerHTML = "";
@@ -429,7 +410,7 @@ function openModal(data) {
       victorsList.appendChild(li);
     });
   } else {
-    victorsList.innerHTML = `<li>${translations[currentLang].noRecords}</li>`;
+    victorsList.innerHTML = `<li>No Records</li>`;
   }
   modal.classList.add("active");
 }
@@ -448,29 +429,6 @@ modal.addEventListener("click", (e) => {
 
 searchInput.addEventListener("input", renderList);
 
-let currentLang = "en";
-
-const translations = {
-  en: { navChallenges: "Challenges", mainChallenges: "Main Challenges", mainList: "Main List", listEditors: "List Editors", founder: "Founder", admin: "Admin", main: "Main", team: "TEAM", levelDetails: "Level Details", victors: "Victors (Passed By)", createdBy: "Created by", verifiedBy: "Verified by", rating: "Rating", difficulty: "Difficulty", type: "Type", noRecords: "No Records" },
-  tr: { navChallenges: "Challenges", mainChallenges: "Ana Challenge'lar", mainList: "Ana Liste", listEditors: "Liste Editörleri", founder: "Kurucu", admin: "Admin", main: "Ana", team: "EKİP", levelDetails: "Level Detayları", victors: "Geçenler", createdBy: "Yapan", verifiedBy: "Doğrulayan", rating: "Rating", difficulty: "Zorluk", type: "Tür", noRecords: "Kayıt Yok" }
-};
-
-function setLanguage(lang) {
-  currentLang = lang;
-  document.documentElement.lang = lang;
-  document.querySelectorAll("[data-i18n]").forEach(el => {
-    const key = el.dataset.i18n;
-    if (translations[lang]?.[key]) el.textContent = translations[lang][key];
-  });
-  document.querySelectorAll(".langBtn").forEach(btn => btn.classList.toggle("active", btn.dataset.lang === lang));
-  localStorage.setItem("gdcl-lang", lang);
-}
-
-document.querySelectorAll(".langBtn").forEach(btn => {
-  btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
-});
-
-setLanguage(localStorage.getItem("gdcl-lang") || "en");
 renderList();
 </script>
 </body>
