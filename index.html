@@ -294,7 +294,7 @@ footer{
       <h1>GD <em>Challenge List</em></h1>
     </div>
     <div class="heroStats">
-      <div class="heroStat"><b>0</b><span data-i18n="mainChallenges">Main Challenges</span></div>
+      <div class="heroStat"><b>1</b><span data-i18n="mainChallenges">Main Challenges</span></div>
     </div>
   </div>
 </section>
@@ -319,13 +319,13 @@ footer{
 </section>
 
 <aside class="side">
-  <div class="sideTitle"><h3 data-i18n="listEditors">List Editors</h3><span>TEAM</span></div>
+  <div class="sideTitle"><h3 data-i18n="listEditors">List Editors</h3><span data-i18n="team">TEAM</span></div>
   <div class="people">
     <div class="person"><div class="avatar">S</div><b>Salqih</b><span data-i18n="founder">Founder</span></div>
     <div class="person"><div class="avatar">K</div><b>KodOdins</b><span data-i18n="admin">Admin</span></div>
   </div>
   <div class="sideStats">
-    <div class="sideStat"><b>0</b><span data-i18n="main">Main</span></div>
+    <div class="sideStat"><b>1</b><span data-i18n="main">Main</span></div>
   </div>
 </aside>
 </main>
@@ -340,11 +340,11 @@ footer{
     </div>
     <div class="modalGrid">
       <div class="modalBox">
-        <h4>Level Details</h4>
+        <h4 data-i18n="levelDetails">Level Details</h4>
         <div id="modalDetails" style="font-size:13px;line-height:1.6;"></div>
       </div>
       <div class="modalBox">
-        <h4>Victors (Passed By)</h4>
+        <h4 data-i18n="victors">Victors (Passed By)</h4>
         <ul class="victorsList" id="modalVictors"></ul>
       </div>
     </div>
@@ -354,7 +354,20 @@ footer{
 <footer>GD Challenge List · Community maintained · Geometry Dash Challenge Rankings</footer>
 
 <script>
-const challenges=[];
+const challenges=[
+{
+  id:"148673531",
+  name:"Wave Challenge",
+  creator:"KodOdins",
+  verifier:"KodOdins",
+  ytId:"qvPGoGWch7E",
+  thumb:"https://img.youtube.com/vi/qvPGoGWch7E/hqdefault.jpg",
+  points:60.00,
+  diff:"Top 1",
+  type:"main",
+  victors:[]
+}
+];
 
 const listEl = document.getElementById("challengeList");
 const modal = document.getElementById("modal");
@@ -392,7 +405,7 @@ function renderList() {
 
 function openModal(data) {
   document.getElementById("modalTitle").innerText = data.name;
-  document.getElementById("modalSub").innerHTML = `Created by <b>${data.creator}</b> | Verified by <b>${data.verifier || "N/A"}</b>`;
+  document.getElementById("modalSub").innerHTML = `${translations[currentLang].createdBy} <b>${data.creator}</b> | ${translations[currentLang].verifiedBy} <b>${data.verifier || "N/A"}</b>`;
   const iframe = document.getElementById("modalVideo");
   if(data.ytId) {
     iframe.src = `https://www.youtube.com/embed/${data.ytId}?autoplay=1`;
@@ -402,9 +415,10 @@ function openModal(data) {
     iframe.parentElement.style.display = "none";
   }
   document.getElementById("modalDetails").innerHTML = `
-    <b>Points:</b> ${data.points}<br>
-    <b>Difficulty:</b> ${data.diff}<br>
-    <b>Type:</b> ${data.type.toUpperCase()}
+    <b>ID:</b> ${data.id || "N/A"}<br>
+    <b>${translations[currentLang].rating}:</b> ${data.points}<br>
+    <b>${translations[currentLang].difficulty}:</b> ${data.diff}<br>
+    <b>${translations[currentLang].type}:</b> ${data.type.toUpperCase()}
   `;
   const victorsList = document.getElementById("modalVictors");
   victorsList.innerHTML = "";
@@ -415,7 +429,7 @@ function openModal(data) {
       victorsList.appendChild(li);
     });
   } else {
-    victorsList.innerHTML = "<li>No recorded victors yet.</li>";
+    victorsList.innerHTML = `<li>${translations[currentLang].noRecords}</li>`;
   }
   modal.classList.add("active");
 }
@@ -434,12 +448,15 @@ modal.addEventListener("click", (e) => {
 
 searchInput.addEventListener("input", renderList);
 
+let currentLang = "en";
+
 const translations = {
-  en: { navChallenges: "Challenges", mainChallenges: "Main Challenges", mainList: "Main List", listEditors: "List Editors", founder: "Founder", admin: "Admin", main: "Main" },
-  tr: { navChallenges: "Challenges", mainChallenges: "Ana Challenge'lar", mainList: "Ana Liste", listEditors: "Liste Editörleri", founder: "Kurucu", admin: "Admin", main: "Ana" }
+  en: { navChallenges: "Challenges", mainChallenges: "Main Challenges", mainList: "Main List", listEditors: "List Editors", founder: "Founder", admin: "Admin", main: "Main", team: "TEAM", levelDetails: "Level Details", victors: "Victors (Passed By)", createdBy: "Created by", verifiedBy: "Verified by", rating: "Rating", difficulty: "Difficulty", type: "Type", noRecords: "No Records" },
+  tr: { navChallenges: "Challenges", mainChallenges: "Ana Challenge'lar", mainList: "Ana Liste", listEditors: "Liste Editörleri", founder: "Kurucu", admin: "Admin", main: "Ana", team: "EKİP", levelDetails: "Level Detayları", victors: "Geçenler", createdBy: "Yapan", verifiedBy: "Doğrulayan", rating: "Rating", difficulty: "Zorluk", type: "Tür", noRecords: "Kayıt Yok" }
 };
 
 function setLanguage(lang) {
+  currentLang = lang;
   document.documentElement.lang = lang;
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.dataset.i18n;
