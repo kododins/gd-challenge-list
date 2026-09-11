@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GD Challenge List</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root{
+  --bg:#090507;
+  --surface:#12090d;
+  --surface2:#190b11;
+  --surface3:#211019;
+  --border:#3b1825;
+  --red:#8f2345;
+  --red2:#c74369;
+  --red3:#ed7895;
+  --text:#fff7f9;
+  --muted:#a98d96;
+  --gold:#f4c27a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  background:
+    radial-gradient(800px 500px at 5% -10%,rgba(199,67,105,.22),transparent 65%),
+    radial-gradient(700px 500px at 100% 20%,rgba(143,35,69,.18),transparent 65%),
+    linear-gradient(145deg,#090507,#10070b 55%,#080406);
+  min-height:100vh;
+}
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;opacity:.08;
+  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:42px 42px;
+}
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(9,5,7,.78);
+  backdrop-filter:blur(22px);
+  border-bottom:1px solid rgba(199,67,105,.18);
+}
+.nav{
+  max-width:1280px;margin:auto;height:74px;padding:0 26px;
+  display:flex;align-items:center;gap:34px;
+}
+.brand{
+  display:flex;align-items:center;gap:11px;
+  font-size:19px;font-weight:900;letter-spacing:-.6px;white-space:nowrap;
+}
+.brandmark{
+  width:32px;height:32px;border-radius:9px;
+  background:linear-gradient(135deg,#6f1735,#c74369);
+  display:grid;place-items:center;
+  box-shadow:0 8px 25px rgba(199,67,105,.24);
+}
+.brandmark:after{
+  content:"";width:11px;height:11px;border:3px solid white;transform:rotate(45deg)
+}
+.brand span{color:var(--red3)}
+.navlinks{display:flex;gap:5px;flex:1}
+.navlinks a{
+  color:var(--muted);text-decoration:none;padding:10px 14px;border-radius:9px;
+  font-size:13px;font-weight:700;transition:.2s
+}
+.navlinks a:hover,.navlinks a.active{color:white;background:rgba(199,67,105,.10)}
+.status{
+  border:1px solid var(--border);background:rgba(255,255,255,.025);
+  border-radius:10px;padding:9px 12px;font-size:11px;font-weight:700;color:#d8c3c9
+}
+.langSwitch{
+  display:flex;align-items:center;gap:3px;
+  padding:3px;border:1px solid var(--border);border-radius:10px;
+  background:rgba(255,255,255,.025)
+}
+.langBtn{
+  border:0;background:transparent;color:var(--muted);
+  padding:7px 9px;border-radius:7px;cursor:pointer;
+  font:800 10px Inter;transition:.2s
+}
+.langBtn.active{
+  color:white;
+  background:linear-gradient(135deg,#741b3a,#b7355d);
+  box-shadow:0 3px 12px rgba(143,35,69,.25)
+}
+.status i{display:inline-block;width:7px;height:7px;background:#71d49a;border-radius:50%;margin-right:7px}
+
+.hero{max-width:1280px;margin:auto;padding:76px 26px 34px}
+.heroGrid{display:grid;grid-template-columns:1fr 340px;gap:45px;align-items:end}
+.kicker{
+  color:var(--red3);font-size:11px;font-weight:900;letter-spacing:2.6px;
+  text-transform:uppercase;margin-bottom:15px
+}
+h1{
+  margin:0;font-size:clamp(44px,7vw,78px);line-height:.92;
+  letter-spacing:-4px;font-weight:900
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(90deg,#fff 0%,#f6b7c6 42%,#c74369 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.heroDesc{color:var(--muted);max-width:690px;line-height:1.7;font-size:14px;margin:23px 0 0}
+.heroStats{
+  display:grid;grid-template-columns:1fr 1fr;gap:9px
+}
+.heroStat{
+  border:1px solid var(--border);background:linear-gradient(145deg,rgba(33,16,25,.95),rgba(18,9,13,.95));
+  border-radius:15px;padding:18px
+}
+.heroStat b{font-size:25px;display:block}.heroStat span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+
+.toolbar{
+  max-width:1280px;margin:auto;padding:0 26px 22px;
+  display:flex;gap:9px;align-items:center
+}
+.tabs{
+  display:flex;gap:5px;padding:5px;border:1px solid var(--border);
+  background:rgba(18,9,13,.75);border-radius:13px
+}
+.tab{
+  border:0;background:transparent;color:var(--muted);font:700 12px Inter;
+  padding:10px 16px;border-radius:9px;cursor:pointer;transition:.2s
+}
+.tab.active{
+  color:white;background:linear-gradient(135deg,#741b3a,#b7355d);
+  box-shadow:0 5px 18px rgba(143,35,69,.25)
+}
+.search{
+  margin-left:auto;width:270px;height:40px;display:flex;align-items:center;
+  padding:0 13px;border:1px solid var(--border);border-radius:11px;
+  background:rgba(18,9,13,.78)
+}
+.search span{color:#806a72}.search input{
+  width:100%;border:0;outline:0;background:none;color:white;padding-left:9px;font:500 12px Inter
+}
+select{
+  height:40px;border:1px solid var(--border);border-radius:11px;background:#150a0f;
+  color:#d8c6cc;padding:0 12px;font:600 11px Inter
+}
+
+.content{
+  max-width:1280px;margin:auto;padding:0 26px 70px;
+  display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:20px
+}
+.listHead{
+  display:flex;justify-content:space-between;align-items:center;
+  color:var(--muted);font-size:10px;font-weight:800;letter-spacing:1.3px;
+  text-transform:uppercase;padding:0 8px 10px
+}
+.cards{display:flex;flex-direction:column;gap:8px}
+.card{
+  display:grid;grid-template-columns:54px 112px minmax(0,1fr) 105px;
+  align-items:center;gap:15px;padding:10px;
+  border:1px solid var(--border);border-radius:14px;
+  background:linear-gradient(105deg,rgba(25,11,17,.98),rgba(16,8,12,.98));
+  transition:.22s;position:relative;overflow:hidden
+}
+.card:before{
+  content:"";position:absolute;left:0;top:12px;bottom:12px;width:2px;
+  background:linear-gradient(#7c1d3d,#d65d7c);opacity:.55
+}
+.card:hover{
+  transform:translateX(4px);border-color:#69243a;
+  background:linear-gradient(105deg,rgba(39,15,25,.98),rgba(17,8,12,.98));
+  box-shadow:0 12px 35px rgba(0,0,0,.25)
+}
+.rank{font-size:19px;font-weight:900;text-align:center;color:#755b64}
+.card:nth-child(-n+3) .rank{color:var(--gold)}
+.thumb{
+  height:66px;border-radius:10px;position:relative;overflow:hidden;
+  background:
+    radial-gradient(circle at 25% 25%,rgba(255,180,200,.32),transparent 15%),
+    linear-gradient(135deg,#32101e,#9b2d4e 52%,#431020)
+}
+.thumb:before,.thumb:after{
+  content:"";position:absolute;background:rgba(255,255,255,.08);transform:rotate(45deg)
+}
+.thumb:before{width:120px;height:7px;top:15px;left:-20px}
+.thumb:after{width:100px;height:7px;bottom:15px;right:-10px}
+.cube{
+  position:absolute;z-index:2;left:50%;top:50%;width:24px;height:24px;
+  border:3px solid #fff;transform:translate(-50%,-50%) rotate(45deg);
+  box-shadow:0 0 20px rgba(255,170,190,.65)
+}
+.info h2{margin:0 0 5px;font-size:16px;letter-spacing:-.3px}
+.creator{font-size:11px;color:var(--muted)}
+.creator b{color:#e4cbd2}
+.meta{display:flex;gap:5px;margin-top:9px}
+.badge{
+  font-size:9px;font-weight:800;color:#dcbfc8;padding:4px 7px;
+  border:1px solid #43202d;border-radius:6px;background:#1d0e15
+}
+.points{text-align:right;padding-right:7px}
+.points strong{display:block;font-size:17px}.points small{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:1px}
+
+.side{
+  border:1px solid var(--border);border-radius:15px;background:rgba(18,9,13,.84);
+  padding:20px;height:max-content;position:sticky;top:94px
+}
+.sideTitle{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.side h3{margin:0;font-size:15px}.sideTitle span{font-size:9px;color:var(--red3);font-weight:800}
+.side p{font-size:10px;color:var(--muted);line-height:1.6;margin:0 0 17px}
+.people{display:flex;flex-direction:column;gap:6px;margin-bottom:24px}
+.person{
+  display:flex;align-items:center;gap:10px;padding:9px;
+  border:1px solid rgba(59,24,37,.65);border-radius:9px;background:#160a10
+}
+.avatar{
+  width:27px;height:27px;border-radius:8px;background:linear-gradient(135deg,#65203a,#b53c61);
+  display:grid;place-items:center;font-size:10px;font-weight:900
+}
+.person b{font-size:11px}.person span{margin-left:auto;font-size:9px;color:#866d76}
+.sideStats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sideStat{background:#160a10;border:1px solid rgba(59,24,37,.65);padding:12px;border-radius:9px}
+.sideStat b{display:block;font-size:17px}.sideStat span{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}
+
+.empty{display:none;text-align:center;padding:55px;color:var(--muted);font-size:12px}
+footer{
+  border-top:1px solid var(--border);padding:25px;text-align:center;color:#705a63;
+  font-size:10px;letter-spacing:.4px
+}
+@media(max-width:900px){
+  .heroGrid{grid-template-columns:1fr}.heroStats{max-width:500px}
+  .content{grid-template-columns:1fr}.side{position:static}
+}
+@media(max-width:650px){
+  .navlinks,.status{display:none}.nav{height:65px}.hero{padding-top:50px}
+  h1{letter-spacing:-2px}.toolbar{flex-wrap:wrap}.search{margin-left:0;width:100%}
+  .card{grid-template-columns:40px 1fr 75px}.thumb{display:none}.meta{display:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+<nav class="nav">
+  <div class="brand">
+    <div class="brandmark"></div>
+    GD <span>Challenge List</span>
+  </div>
+  <div class="navlinks">
+    <a class="active" href="#list" data-i18n="challenges">Challenges</a>
+    <a href="#stats" data-i18n="statistics">Statistics</a>
+    <a href="#about" data-i18n="about">About</a>
+  </div>
+  <div class="langSwitch" aria-label="Language selector">
+    <button class="langBtn active" data-lang="en">EN</button>
+    <button class="langBtn" data-lang="tr">TR</button>
+  </div>
+  <div class="status"><i></i><span data-i18n="online">LIST ONLINE</span></div>
+</nav>
+</header>
+
+<section class="hero">
+  <div class="heroGrid">
+    <div>
+      <div class="kicker" data-i18n="kicker">Geometry Dash Community Ranking</div>
+      <h1>GD <em>Challenge List</em></h1>
+      <p class="heroDesc" data-i18n="heroDesc">The community-driven ranking for the hardest Geometry Dash challenges. Explore records, discover new challenges and climb the rankings.</p>
+    </div>
+    <div class="heroStats">
+      <div class="heroStat"><b>150</b><span data-i18n="mainChallenges">Main Challenges</span></div>
+      <div class="heroStat"><b>500+</b><span data-i18n="extended">Extended</span></div>
+      <div class="heroStat"><b>2.4K</b><span data-i18n="records">Records</span></div>
+      <div class="heroStat"><b>98%</b><span data-i18n="verified">Verified</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="tabs">
+    <button class="tab active" data-tab="main" data-i18n="mainList">Main List</button>
+    <button class="tab" data-tab="extended" data-i18n="extendedList">Extended List</button>
+    <button class="tab" data-tab="legacy" data-i18n="legacyList">Legacy List</button>
+  </div>
+  <label class="search"><span>⌕</span><input id="search" placeholder="Search challenges..." data-i18n-placeholder="search"></label>
+  <select id="sort">
+    <option value="rank" data-i18n="rank">Rank</option>
+    <option value="points" data-i18n="points">Points</option>
+    <option value="name" data-i18n="az">A → Z</option>
+  </select>
+</div>
+
+<main class="content" id="list">
+<section>
+  <div class="listHead"><span data-i18n="rankedChallenges">Ranked Challenges</span><span data-i18n="points">Points</span></div>
+  <div class="cards" id="challengeList"></div>
+  <div class="empty" id="empty">No challenges found.</div>
+</section>
+
+<aside class="side" id="stats">
+  <div class="sideTitle"><h3 data-i18n="listEditors">List Editors</h3><span data-i18n="team">TEAM</span></div>
+  <p data-i18n="editorDesc">Editors maintain rankings, verify records and keep the challenge list moving.</p>
+  <div class="people">
+    <div class="person"><div class="avatar">R</div><b>Ranian</b><span data-i18n="editor">Editor</span></div>
+    <div class="person"><div class="avatar">M</div><b>Melv</b><span data-i18n="editor">Editor</span></div>
+    <div class="person"><div class="avatar">A</div><b>Arkane</b><span data-i18n="moderator">Moderator</span></div>
+    <div class="person"><div class="avatar">T</div><b>Tripod Bosonic</b><span data-i18n="editor">Editor</span></div>
+  </div>
+  <div class="sideTitle"><h3 data-i18n="listHelpers">List Helpers</h3><span data-i18n="support">SUPPORT</span></div>
+  <div class="people">
+    <div class="person"><div class="avatar">F</div><b>Foody</b><span data-i18n="helper">Helper</span></div>
+    <div class="person"><div class="avatar">S</div><b>Sphere</b><span data-i18n="helper">Helper</span></div>
+    <div class="person"><div class="avatar">C</div><b>Chaz</b><span data-i18n="helper">Helper</span></div>
+  </div>
+  <div class="sideStats">
+    <div class="sideStat"><b>150</b><span data-i18n="main">Main</span></div>
+    <div class="sideStat"><b>500+</b><span data-i18n="extended">Extended</span></div>
+  </div>
+</aside>
+</main>
+
+<footer id="about" data-i18n="footer">GD Challenge List · Community maintained · Geometry Dash Challenge Rankings</footer>
+
+<script>
+const challenges=[
+{name:"Silent Challenge",creator:"Zerox",points:35.00,diff:"Challenge",type:"main"},
+{name:"Wave Challenge X",creator:"Nox",points:34.42,diff:"Challenge",type:"main"},
+{name:"Thinking Challenge",creator:"CairoX",points:33.17,diff:"Challenge",type:"main"},
+{name:"Amethyst Challenge",creator:"iMist",points:31.34,diff:"Challenge",type:"main"},
+{name:"Tidal Challenge",creator:"OniLink",points:30.91,diff:"Challenge",type:"main"},
+{name:"Avernus Challenge",creator:"PockeWindfish",points:30.22,diff:"Challenge",type:"main"},
+{name:"Slaughter Challenge",creator:"icedcave",points:29.76,diff:"Challenge",type:"main"},
+{name:"Sakupen Challenge",creator:"DiamondSplash",points:28.90,diff:"Challenge",type:"main"},
+{name:"Firework Challenge",creator:"Trick",points:27.84,diff:"Challenge",type:"main"},
+{name:"Blood Challenge",creator:"Riot",points:26.41,diff:"Challenge",type:"main"},
+{name:"Digital Challenge",creator:"Nobro",points:18.50,diff:"Challenge",type:"extended"},
+{name:"Nine Challenge",creator:"Zobros",points:16.20,diff:"Challenge",type:"extended"},
+{name:"Future Challenge",creator:"JonathanGD",points:14.70,diff:"Challenge",type:"extended"},
+{name:"Jawbreaker Challenge",creator:"ZenthicAlpha",points:13.80,diff:"Challenge",type:"legacy"},
+{name:"Windy Challenge",creator:"Woogi",points:12.40,diff:"Challenge",type:"legacy"}
+];
+
+const translations={
+  en:{
+    online:"LIST ONLINE", challenges:"Challenges", statistics:"Statistics", about:"About",
+    kicker:"Geometry Dash Community Ranking",
+    heroDesc:"The community-driven ranking for the hardest Geometry Dash challenges. Explore records, discover new challenges and climb the rankings.",
+    mainChallenges:"Main Challenges", records:"Records", verified:"Verified",
+    mainList:"Main List", extendedList:"Extended List", legacyList:"Legacy List",
+    search:"Search challenges...", rank:"Rank", points:"Points", az:"A → Z",
+    rankedChallenges:"Ranked Challenges", listEditors:"List Editors", team:"TEAM",
+    editorDesc:"Editors maintain rankings, verify records and keep the challenge list moving.",
+    editor:"Editor", moderator:"Moderator", listHelpers:"List Helpers", support:"SUPPORT",
+    helper:"Helper", main:"Main", extended:"Extended",
+    footer:"GD Challenge List · Community maintained · Geometry Dash Challenge Rankings",
+    createdBy:"created by", rated:"Rated", noResults:"No challenges found."
+  },
+  tr:{
+    online:"LİSTE ÇEVRİMİÇİ", challenges:"Challenge'lar", statistics:"İstatistikler", about:"Hakkında",
+    kicker:"Geometry Dash Topluluk Sıralaması",
+    heroDesc:"En zor Geometry Dash challenge'ları için topluluk tarafından hazırlanan sıralama. Rekorları keşfet, yeni challenge'lar bul ve sıralamada yüksel.",
+    mainChallenges:"Ana Challenge'lar", records:"Rekorlar", verified:"Doğrulandı",
+    mainList:"Ana Liste", extendedList:"Genişletilmiş Liste", legacyList:"Eski Liste",
+    search:"Challenge ara...", rank:"Sıralama", points:"Puan", az:"A → Z",
+    rankedChallenges:"Sıralanan Challenge'lar", listEditors:"Liste Editörleri", team:"EKİP",
+    editorDesc:"Editörler sıralamaları yönetir, rekorları doğrular ve challenge listesini güncel tutar.",
+    editor:"Editör", moderator:"Moderatör", listHelpers:"Liste Yardımcıları", support:"DESTEK",
+    helper:"Yardımcı", main:"Ana", extended:"Genişletilmiş",
+    footer:"GD Challenge List · Topluluk tarafından yönetilir · Geometry Dash Challenge Sıralamaları",
+    createdBy:"oluşturan", rated:"Derecelendirildi", noResults:"Challenge bulunamadı."
+  }
+};
+let currentLang="en";
+
+function applyLanguage(lang){
+  currentLang=lang;
+  const t=translations[lang];
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const key=el.dataset.i18n;
+    if(t[key]) el.textContent=t[key];
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{
+    const key=el.dataset.i18nPlaceholder;
+    if(t[key]) el.placeholder=t[key];
+  });
+  document.querySelectorAll(".langBtn").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
+  render();
+}
+document.querySelectorAll(".langBtn").forEach(b=>b.addEventListener("click",()=>applyLanguage(b.dataset.lang)));
+
+let tab="main";
+function render(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const sort=document.getElementById("sort").value;
+ let data=challenges.filter(x=>x.type===tab&&(x.name.toLowerCase().includes(q)||x.creator.toLowerCase().includes(q)));
+ if(sort==="points")data.sort((a,b)=>b.points-a.points);
+ if(sort==="name")data.sort((a,b)=>a.name.localeCompare(b.name));
+ const root=document.getElementById("challengeList");root.innerHTML="";
+ data.forEach((x,i)=>{
+  const el=document.createElement("article");el.className="card";
+  el.innerHTML=`<div class="rank">#${i+1}</div>
+  <div class="thumb"><div class="cube"></div></div>
+  <div class="info"><h2>${x.name}</h2><div class="creator">${translations[currentLang].createdBy} <b>${x.creator}</b></div>
+  <div class="meta"><span class="badge">${x.diff}</span><span class="badge">${translations[currentLang].rated}</span></div></div>
+  <div class="points"><strong>${x.points.toFixed(2)}</strong><small>${translations[currentLang].points.toLowerCase()}</small></div>`;
+  root.appendChild(el);
+ });
+ document.getElementById("empty").textContent=translations[currentLang].noResults;
+ document.getElementById("empty").style.display=data.length?"none":"block";
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+ b.classList.add("active");tab=b.dataset.tab;render();
+});
+document.getElementById("search").oninput=render;
+document.getElementById("sort").onchange=render;
+render();
+</script>
+</body>
+</html>
