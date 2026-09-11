@@ -277,9 +277,7 @@ footer{
     GD <span>Challenge List</span>
   </div>
   <div class="navlinks">
-    <a class="active" href="#list">Challenges</a>
-    <a href="#stats">Statistics</a>
-    <a href="#about">About</a>
+    <a class="active" href="#list" data-i18n="navChallenges">Challenges</a>
   </div>
   <div class="langSwitch" aria-label="Language selector">
     <button class="langBtn active" data-lang="en">EN</button>
@@ -294,22 +292,16 @@ footer{
     <div>
       <div class="kicker">Geometry Dash Community Ranking</div>
       <h1>GD <em>Challenge List</em></h1>
-      <p class="heroDesc">The community-driven ranking for the hardest Geometry Dash challenges. Explore records, discover new challenges and climb the rankings.</p>
     </div>
     <div class="heroStats">
-      <div class="heroStat"><b>150</b><span>Main Challenges</span></div>
-      <div class="heroStat"><b>500+</b><span>Extended</span></div>
-      <div class="heroStat"><b>2.4K</b><span>Records</span></div>
-      <div class="heroStat"><b>98%</b><span>Verified</span></div>
+      <div class="heroStat"><b>0</b><span data-i18n="mainChallenges">Main Challenges</span></div>
     </div>
   </div>
 </section>
 
 <div class="toolbar">
   <div class="tabs">
-    <button class="tab active" data-tab="main">Main List</button>
-    <button class="tab" data-tab="extended">Extended List</button>
-    <button class="tab" data-tab="legacy">Legacy List</button>
+    <button class="tab active" data-tab="main" data-i18n="mainList">Main List</button>
   </div>
   <label class="search"><span>⌕</span><input id="search" placeholder="Search challenges..."></label>
   <select id="sort">
@@ -326,24 +318,14 @@ footer{
   <div class="empty" id="empty">No challenges found.</div>
 </section>
 
-<aside class="side" id="stats">
-  <div class="sideTitle"><h3>List Editors</h3><span>TEAM</span></div>
-  <p>Editors maintain rankings, verify records and keep the challenge list moving.</p>
+<aside class="side">
+  <div class="sideTitle"><h3 data-i18n="listEditors">List Editors</h3><span>TEAM</span></div>
   <div class="people">
-    <div class="person"><div class="avatar">R</div><b>Ranian</b><span>Editor</span></div>
-    <div class="person"><div class="avatar">M</div><b>Melv</b><span>Editor</span></div>
-    <div class="person"><div class="avatar">A</div><b>Arkane</b><span>Moderator</span></div>
-    <div class="person"><div class="avatar">T</div><b>Tripod Bosonic</b><span>Editor</span></div>
-  </div>
-  <div class="sideTitle"><h3>List Helpers</h3><span>SUPPORT</span></div>
-  <div class="people">
-    <div class="person"><div class="avatar">F</div><b>Foody</b><span>Helper</span></div>
-    <div class="person"><div class="avatar">S</div><b>Sphere</b><span>Helper</span></div>
-    <div class="person"><div class="avatar">C</div><b>Chaz</b><span>Helper</span></div>
+    <div class="person"><div class="avatar">S</div><b>Salqih</b><span data-i18n="founder">Founder</span></div>
+    <div class="person"><div class="avatar">K</div><b>KodOdins</b><span data-i18n="admin">Admin</span></div>
   </div>
   <div class="sideStats">
-    <div class="sideStat"><b>150</b><span>Main</span></div>
-    <div class="sideStat"><b>500+</b><span>Extended</span></div>
+    <div class="sideStat"><b>0</b><span data-i18n="main">Main</span></div>
   </div>
 </aside>
 </main>
@@ -372,101 +354,45 @@ footer{
 <footer>GD Challenge List · Community maintained · Geometry Dash Challenge Rankings</footer>
 
 <script>
-const challenges=[
-{
-  name:"Firework",
-  creator:"Cherry Team (Vernam & more)",
-  verifier:"Trick",
-  ytId:"SuaAscUC8UM",
-  thumb:"https://img.youtube.com/vi/SuaAscUC8UM/hqdefault.jpg",
-  points:100.00,
-  diff:"Top 1 Extreme",
-  type:"main",
-  victors:["Trick (Verifier)", "Zoink", "Doggie", "wip", "curry"]
-},
-{
-  name:"SALDİH NIWA VERİFİED",
-  creator:"SALDİH NIWA",
-  verifier:"SALDİH NIWA",
-  ytId:"",
-  thumb:"",
-  points:35.00,
-  diff:"Challenge",
-  type:"main",
-  victors:[]
-},
-{
-  name:"Wave Challenge X",
-  creator:"Nox",
-  verifier:"Nox",
-  ytId:"",
-  thumb:"",
-  points:34.42,
-  diff:"Challenge",
-  type:"main",
-  victors:[]
-},
-{
-  name:"Thinking Challenge",
-  creator:"CairoX",
-  verifier:"CairoX",
-  ytId:"",
-  thumb:"",
-  points:33.17,
-  diff:"Challenge",
-  type:"main",
-  victors:[]
-},
-{
-  name:"Amethyst Challenge",
-  creator:"iMist",
-  verifier:"iMist",
-  ytId:"",
-  thumb:"",
-  points:31.34,
-  diff:"Challenge",
-  type:"main",
-  victors:[]
-}
-];
+const challenges=[];
 
 const listEl = document.getElementById("challengeList");
 const modal = document.getElementById("modal");
 const modalClose = document.getElementById("modalClose");
+const searchInput = document.getElementById("search");
 
 function renderList() {
+  const query = (searchInput?.value || "").trim().toLowerCase();
+  const filtered = challenges.filter(item =>
+    item.name.toLowerCase().includes(query) ||
+    item.creator.toLowerCase().includes(query)
+  );
+
   listEl.innerHTML = "";
-  challenges.forEach((item, index) => {
+  filtered.forEach((item, index) => {
     const card = document.createElement("div");
     card.className = "card";
-    
     const thumbStyle = item.thumb ? `style="background-image:url('${item.thumb}')"` : "";
-
     card.innerHTML = `
       <div class="rank">#${index + 1}</div>
       <div class="thumb" ${thumbStyle}></div>
       <div class="info">
         <h2>${item.name}</h2>
         <div class="creator">By <b>${item.creator}</b></div>
-        <div class="meta">
-          <span class="badge">${item.diff}</span>
-        </div>
+        <div class="meta"><span class="badge">${item.diff}</span></div>
       </div>
-      <div class="points">
-        <strong>${item.points.toFixed(2)}</strong>
-        <small>Points</small>
-      </div>
+      <div class="points"><strong>${item.points.toFixed(2)}</strong><small>Points</small></div>
     `;
-
     card.addEventListener("click", () => openModal(item));
     listEl.appendChild(card);
   });
+
+  document.getElementById("empty").style.display = filtered.length ? "none" : "block";
 }
 
 function openModal(data) {
   document.getElementById("modalTitle").innerText = data.name;
   document.getElementById("modalSub").innerHTML = `Created by <b>${data.creator}</b> | Verified by <b>${data.verifier || "N/A"}</b>`;
-  
   const iframe = document.getElementById("modalVideo");
   if(data.ytId) {
     iframe.src = `https://www.youtube.com/embed/${data.ytId}?autoplay=1`;
@@ -475,13 +401,11 @@ function openModal(data) {
     iframe.src = "";
     iframe.parentElement.style.display = "none";
   }
-
   document.getElementById("modalDetails").innerHTML = `
     <b>Points:</b> ${data.points}<br>
     <b>Difficulty:</b> ${data.diff}<br>
     <b>Type:</b> ${data.type.toUpperCase()}
   `;
-
   const victorsList = document.getElementById("modalVictors");
   victorsList.innerHTML = "";
   if(data.victors && data.victors.length > 0) {
@@ -493,7 +417,6 @@ function openModal(data) {
   } else {
     victorsList.innerHTML = "<li>No recorded victors yet.</li>";
   }
-
   modal.classList.add("active");
 }
 
@@ -509,6 +432,28 @@ modal.addEventListener("click", (e) => {
   }
 });
 
+searchInput.addEventListener("input", renderList);
+
+const translations = {
+  en: { navChallenges: "Challenges", mainChallenges: "Main Challenges", mainList: "Main List", listEditors: "List Editors", founder: "Founder", admin: "Admin", main: "Main" },
+  tr: { navChallenges: "Challenges", mainChallenges: "Ana Challenge'lar", mainList: "Ana Liste", listEditors: "Liste Editörleri", founder: "Kurucu", admin: "Admin", main: "Ana" }
+};
+
+function setLanguage(lang) {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.dataset.i18n;
+    if (translations[lang]?.[key]) el.textContent = translations[lang][key];
+  });
+  document.querySelectorAll(".langBtn").forEach(btn => btn.classList.toggle("active", btn.dataset.lang === lang));
+  localStorage.setItem("gdcl-lang", lang);
+}
+
+document.querySelectorAll(".langBtn").forEach(btn => {
+  btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
+});
+
+setLanguage(localStorage.getItem("gdcl-lang") || "en");
 renderList();
 </script>
 </body>
